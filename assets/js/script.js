@@ -25,13 +25,16 @@ var questionBank = [
         correctAnswer: "Quotes"
     }
 ]
-
 var startBtn = document.getElementById('start-btn')
 var startContainer = document.getElementById('start-container')
 var questionContainer = document.getElementById('question-container')
 var question = document.getElementById('question')
 var optionsContainer = document.getElementById('options-container')
 var timeContainer = document.createElement('h2')
+var resultsContainer = document.getElementById('results-container')
+var results = document.getElementById('results')
+var finalScore = document.getElementById('final-score')
+var saveResults = document.getElementById('save-results')
 
 var questionIndex = 0
 var score = 0
@@ -44,43 +47,52 @@ startBtn.addEventListener('click', function () {
     startTimer()
 })
 
+// function to load high scores
+function getHighScore() {
+    localStorage.getItem();
+}
+
 // function to end the game when there are no more questions or time has run out
-function endQuiz(reason) {
-    console.log('no more questions');
-    var resultsContainer = document.getElementById('results-container')
+function endQuiz() {
+    // display that user is finished and show final score
+    results.textContent = "All done!"
+    timeContainer.classList.add("hidden")
+    finalScore.append('Your final score is: ' + score);
 
-    if (reason = 'timeExpired'){
-        resultsContainer.textContent = "Time's Up!"
-    }
+    // allow user to enter initials and submit high score
+    var enterInitials = document.createElement("input");
+    enterInitials.setAttribute("type", "text");
+    saveResults.textContent = 'Enter initials: '
+    saveResults.append(enterInitials);
+    var highScoreBtn = document.createElement('button')
+    highScoreBtn.textContent = 'Submit'
+    saveResults.append(highScoreBtn)
+    highScoreBtn.addEventListener('click', function () {
+        // function to submit high scores; will add initials and high score to local storage
+        var addInitials = enterInitials.value;
+        console.log(addInitials)
+    
+        localStorage.setItem(addInitials, score)
 
-    if (reason = 'done'){
-        resultsContainer.textContent = "All done!"
-        timeContainer.classList.add("hidden")
-    }
-    resultsContainer.append('Your final score is: ' + score);
-    var highScore = document.createElement("input");
-    highScore.setAttribute("type", "text");
-    resultsContainer.append(highScore);
-    var initialsBtn = document.createElement('button')
-    initialsBtn.textContent = 'Submit'
-    resultsContainer.append(initialsBtn)
-    initialsBtn.addEventListener('click', function(){
-        localStorage.setItem(highScore, score)
+        // after adding initials user is taken to the highscore.html page
+        getHighScore();
+
+
     })
 }
 
 // function to start the timer after the user starts the quiz
 function startTimer() {
-    timeContainer.textContent = timer
+    timeContainer.textContent = 'Timer:' + timer
     questionContainer.append(timeContainer)
     var timeInt = setInterval(() => {
         timer--
         if (timer <= 0) {
             clearInterval(timeInt);
-            endQuiz('timeExpired');
+            endQuiz();
             questionContainer.classList.add("hidden")
         }
-        timeContainer.textContent = timer
+        timeContainer.textContent = 'Timer:' + timer
     }, 1000);
 }
 
@@ -92,7 +104,7 @@ function getQuestion() {
 
     // check if there are any more questions, if not call endQuiz function, otherwise contain with this function
     if (questionIndex == questionBank.length) {
-        endQuiz('done');
+        endQuiz();
     } else {
         question.textContent = questionBank[questionIndex].question
 
