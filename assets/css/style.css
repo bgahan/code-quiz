@@ -23,13 +23,25 @@ div {
     margin: auto;
 }
 
+h2 {
+    text-align: center;
+}
+
 #results-container {
     width: 50%;
     text-align: left;
 }
 
 #save-results {
+    /* width: 50%; */
     display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+#save-results input {
+    border-radius: 8px;
 }
 
 

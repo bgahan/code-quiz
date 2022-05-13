@@ -56,7 +56,6 @@ startBtn.addEventListener('click', function () {
 function endQuiz() {
     // display that user is finished and show final score
     results.textContent = "All done!"
-    timeContainer.classList.add("hidden")
     finalScore.append('Your final score is: ' + score);
 
     // allow user to enter initials and submit high score
@@ -71,7 +70,7 @@ function endQuiz() {
         // function to submit high scores; will add initials and high score to local storage
         var addInitials = enterInitials.value;
         console.log(addInitials)
-    
+
         // localStorage.setItem(addInitials, score)
         var storage = JSON.parse(localStorage.getItem('userScoreStorage'))
         if (storage === null) {
@@ -80,7 +79,7 @@ function endQuiz() {
 
         var user = {
             name: addInitials,
-            userScore: score 
+            userScore: score
         }
 
         storage.push(user)
@@ -101,10 +100,10 @@ function startTimer() {
         timer--
         if (timer <= 0 || questionIndex == questionBank.length) {
             clearInterval(timeInt);
+            timeContainer.classList.add("hidden"); questionContainer.classList.add("hidden");
             endQuiz();
-            questionContainer.classList.add("hidden")
         }
-        timeContainer.textContent = 'Timer:' + timer
+        timeContainer.textContent = 'Timer: ' + timer
     }, 1000);
 }
 
