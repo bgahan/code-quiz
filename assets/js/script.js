@@ -38,7 +38,7 @@ var saveResults = document.getElementById('save-results')
 
 var questionIndex = 0
 var score = 0
-var timer = 20
+var timer = 50
 
 
 startBtn.addEventListener('click', function () {
@@ -48,9 +48,9 @@ startBtn.addEventListener('click', function () {
 })
 
 // function to load high scores
-function getHighScore() {
-    localStorage.getItem();
-}
+// function getHighScore() {
+//     localStorage.getItem();
+// }
 
 // function to end the game when there are no more questions or time has run out
 function endQuiz() {
@@ -72,10 +72,22 @@ function endQuiz() {
         var addInitials = enterInitials.value;
         console.log(addInitials)
     
-        localStorage.setItem(addInitials, score)
+        // localStorage.setItem(addInitials, score)
+        var storage = JSON.parse(localStorage.getItem('userScoreStorage'))
+        if (storage === null) {
+            storage = []
+        }
+
+        var user = {
+            name: addInitials,
+            userScore: score 
+        }
+
+        storage.push(user)
+        localStorage.setItem('userScoreStorage', JSON.stringify(storage))
 
         // after adding initials user is taken to the highscore.html page
-        getHighScore();
+        window.location.href = 'highscore.html';
 
 
     })
@@ -87,7 +99,7 @@ function startTimer() {
     questionContainer.append(timeContainer)
     var timeInt = setInterval(() => {
         timer--
-        if (timer <= 0) {
+        if (timer <= 0 || questionIndex == questionBank.length) {
             clearInterval(timeInt);
             endQuiz();
             questionContainer.classList.add("hidden")
@@ -104,7 +116,7 @@ function getQuestion() {
 
     // check if there are any more questions, if not call endQuiz function, otherwise contain with this function
     if (questionIndex == questionBank.length) {
-        endQuiz();
+        return
     } else {
         question.textContent = questionBank[questionIndex].question
 
